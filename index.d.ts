@@ -5,6 +5,7 @@ declare class JanusStatic {
   isConnected(): boolean;
   getSessionId(): string;
   attach(options: JanusStatic.IJanusPluginOptions): void;
+  destroy(options?: JanusStatic.IJanusDestroyedOptions): void;
 }
 
 declare module JanusStatic {
@@ -35,6 +36,11 @@ declare module JanusStatic {
     callback: Function;
   }
 
+  export interface IJanusDestroyedOptions {
+    success: () => void;
+    error: (err: string) => void;
+  }
+
   export interface IJanusPluginOptions {
     plugin: string;
     opaqueId?: string;
@@ -59,12 +65,14 @@ declare module JanusStatic {
     private_id: number;
     display: string;
     videoroom: string;
-    publishers?: {
-      id: number;
-      display: string;
-    }[];
+    publishers?: IPublisher[];
     leaving?: number;
     unpublished?: string;
+  }
+
+  export interface IPublisher {
+    id: number;
+    display: string;
   }
 
   export interface IJanusPluginHandle {
