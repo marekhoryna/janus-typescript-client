@@ -101,16 +101,10 @@ declare module JanusStatic {
     media: {
       audioSend?: boolean;
       audioRecv?: boolean;
-      audio?: boolean | {
-        deviceId: string;
-      };
+      audio?: any;
       videoSend?: boolean;
       videoRecv?: boolean;
-      video?: boolean | string | {
-        deviceId: string;
-        width?: number;
-        height?: number;
-      };
+      video?: any;
       data?: boolean;
       failIfNoAudio?: boolean;
       failIfNoVideo?: boolean;
