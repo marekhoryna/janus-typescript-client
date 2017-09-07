@@ -17,7 +17,7 @@ declare module JanusStatic {
   export function randomString(length: number): string;
 
   export interface IJanusOptions {
-    server: string;
+    server: string | string[];
     iceServers?: string[];
     ipv6?: boolean;
     withCredentials?: boolean;
