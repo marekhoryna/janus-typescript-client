@@ -65,6 +65,7 @@ declare module JanusStatic {
     private_id: number;
     display: string;
     videoroom: string;
+    audiobridge: string;
     publishers?: IPublisher[];
     leaving?: number;
     unpublished?: string;
