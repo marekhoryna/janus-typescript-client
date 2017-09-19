@@ -67,6 +67,7 @@ declare module JanusStatic {
     videoroom: string;
     audiobridge: string;
     publishers?: IPublisher[];
+    participants?: IParticipant[];
     leaving?: number;
     unpublished?: string;
   }
@@ -74,6 +75,12 @@ declare module JanusStatic {
   export interface IPublisher {
     id: number;
     display: string;
+  }
+
+  export interface IParticipant {
+    id: number;
+    display: string;
+    muted: boolean;
   }
 
   export interface IJanusPluginHandle {
