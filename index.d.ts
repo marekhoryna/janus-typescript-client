@@ -1,5 +1,5 @@
 declare namespace JanusJS {
-    export interface Dependencies {
+    interface Dependencies {
         adapter: any;
         newWebSocket: (server: string, protocol: string) => WebSocket;
         isArray: (array: any) => array is Array<any>;
@@ -7,7 +7,7 @@ declare namespace JanusJS {
         httpAPICall: (url: string, options: any) => void;
     }
 
-    export enum DebugLevel {
+    enum DebugLevel {
         Trace = 'trace',
         Debug = 'debug',
         Log = 'log',
@@ -15,15 +15,15 @@ declare namespace JanusJS {
         Error = 'error'
     }
 
-    export interface JSEP {}
+    interface JSEP {}
 
-    export interface InitOptions {
+    interface InitOptions {
         debug?: boolean | 'all' | DebugLevel[];
         callback?: Function;
         dependencies?: Dependencies;
     }
 
-    export interface ConstuctorOptions {
+    interface ConstuctorOptions {
         server: string | string[];
         iceServers?: string[];
         ipv6?: boolean;
@@ -37,7 +37,7 @@ declare namespace JanusJS {
         destroyed?: Function;
     }
 
-    export enum MessageType {
+    enum MessageType {
         Recording = 'recording',
         Stopped = 'stopped',
         SlowLink = 'slow_link',
@@ -45,7 +45,7 @@ declare namespace JanusJS {
         Refreshing = 'refreshing'
     }
 
-    export interface Message {
+    interface Message {
         result?: {
             status: MessageType;
             id?: string;
@@ -53,7 +53,7 @@ declare namespace JanusJS {
         };
     }
 
-    export interface PluginOptions {
+    interface PluginOptions {
         plugin: string;
         opaqueId?: string;
         success?: (handle: PluginHandle) => void;
@@ -72,7 +72,7 @@ declare namespace JanusJS {
         detached?: Function;
     }
 
-    export interface OfferParams {
+    interface OfferParams {
         media?: {
             audioSend?: boolean;
             audioRecv?: boolean;
@@ -99,7 +99,7 @@ declare namespace JanusJS {
         error: (error: any) => void;
     }
 
-    export interface PluginMessage {
+    interface PluginMessage {
         message: {
             request: string;
             [otherProps: string]: any;
@@ -107,7 +107,7 @@ declare namespace JanusJS {
         jsep?: JSEP;
     }
 
-    export interface PluginHandle {
+    interface PluginHandle {
         getId(): string;
         getPlugin(): string;
         send(message: PluginMessage): void;
@@ -121,7 +121,7 @@ declare namespace JanusJS {
         detach(params: any): void;
     }
 
-    export class Janus {
+    class Janus {
         static useDefaultDependencies(deps: Partial<Dependencies>): Dependencies;
         static useOldDependencies(deps: Partial<Dependencies>): Dependencies;
         static init(options: InitOptions): void;
