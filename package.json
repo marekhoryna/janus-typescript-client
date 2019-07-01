@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marekhoryna/janus-typescript-client.git"
+    "url": "git+https://github.com/kow33/janus-typescript-client.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/marekhoryna/janus-typescript-client/issues"
+    "url": "https://github.com/kow33/janus-typescript-client/issues"
   },
-  "homepage": "https://github.com/marekhoryna/janus-typescript-client#readme"
+  "homepage": "https://github.com/kow33/janus-typescript-client#readme"
 }

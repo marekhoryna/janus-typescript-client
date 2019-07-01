@@ -4,7 +4,7 @@ Wrapper with library and typescript definitions for Janus Gateway Client.
 
 ## Installation
 
-`yarn add https://github.com/marekhoryna/janus-typescript-client`
+`yarn add https://github.com/kow33/janus-typescript-client`
 
 ## Usage
 
