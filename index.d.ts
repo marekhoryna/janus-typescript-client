@@ -1,141 +1,166 @@
-declare class JanusStatic {
-  constructor(options: JanusStatic.IJanusOptions);
-
-  getServer(): string;
-  isConnected(): boolean;
-  getSessionId(): string;
-  attach(options: JanusStatic.IJanusPluginOptions): void;
-  destroy(options?: JanusStatic.IJanusDestroyedOptions): void;
-}
-
-declare module JanusStatic {
-  export function init(options: IJanusInitOptions): void;
-  export function attachMediaStream (element: Element, stream: MediaStream): void;
-  export function listDevices(callback: (devices: MediaDeviceInfo[]) => void): void;
-  export function isWebrtcSupported(): boolean;
-  export function isExtensionEnabled(): boolean;
-  export function randomString(length: number): string;
-
-  export interface IJanusOptions {
-    server: string | string[];
-    iceServers?: string[];
-    ipv6?: boolean;
-    withCredentials?: boolean;
-    max_poll_events?: number;
-    destroyOnUnload?: boolean;
-    token?: string;
-    apisecret?: string;
-
-    success: () => void;
-    error: (err: Error) => void;
-    destroyed: () => void;
-  }
-
-  export interface IJanusInitOptions {
-    debug?: boolean;
-    callback: Function;
-  }
-
-  export interface IJanusDestroyedOptions {
-    success: () => void;
-    error: (err: string) => void;
-  }
-
-  export interface IJanusPluginOptions {
-    plugin: string;
-    opaqueId?: string;
-
-    success: (handle: IJanusPluginHandle) => void;
-    error: (error: Error) => void;
-    consentDialog?: (on?: boolean) => void;
-    onmessage?: (message: IMessage, jsep: any) => void;
-    onlocalstream?: (stream: any) => void;
-    onremotestream?: (stream: any) => void;
-    oncleanup?: () => void;
-    detached?: () => void;
-    ondataopen?: (data: any) => void;
-    ondata?: (data: any) => void;
-    webrtcState?: (data: any) => void;
-    slowLink?: (data: any) => void;
-    mediaState?: (data: any) => void;
-  }
-
-  export interface IMessage {
-    id: number;
-    private_id: number;
-    display: string;
-    videoroom: string;
-    audiobridge: string;
-    publishers?: IPublisher[];
-    participants?: IParticipant[];
-    leaving?: number;
-    unpublished?: string;
-  }
-
-  export interface IPublisher {
-    id: number;
-    display: string;
-  }
-
-  export interface IParticipant {
-    id: number;
-    display: string;
-    muted: boolean;
-  }
-
-  export interface IJanusPluginHandle {
-    getId(): string;
-    getPlugin(): string;
-    getBitrate(): string;
-    send(parameters: any): void;
-    createOffer(options: ICreateOfferOptions): void;
-    createAnswer(options: IAnswerOfferOptions): void;
-    handleRemoteJsep(callbacks: any): void;
-    hangup(sendRequest?: boolean): void;
-    detach(): void;
-
-    isAudioMuted(): void;
-    muteAudio(): void;
-    unmuteAudio(): void;
-
-    isVideoMuted(): void;
-    muteVideo(): void;
-    unmuteVideo(): void;
-
-    webrtcStuff: any;
-  }
-
-  export interface ICreateOfferOptions {
-    media: {
-      audioSend?: boolean;
-      audioRecv?: boolean;
-      audio?: any;
-      videoSend?: boolean;
-      videoRecv?: boolean;
-      video?: any;
-      data?: boolean;
-      failIfNoAudio?: boolean;
-      failIfNoVideo?: boolean;
-      screenshareFrameRate?: number;
-    };
-    trickle?: boolean;
-    stream?: any;
-    success: (jsep: string) => void;
-    error: (err: Error) => void;
-  }
-
-  export interface IAnswerOfferOptions extends ICreateOfferOptions {
-    jsep: string;
-  }
-
-  export type MessageType = {
-    Attached: 'attached',
-    Joined: 'joined',
-    Destroyed: 'destroyed',
-    Event: 'event',
-  };
-}
-
 declare module "janus-typescript-client" {
-  export = JanusStatic;
+    export interface Dependencies {
+        adapter: any;
+        newWebSocket: (server: string, protocol: string) => WebSocket;
+        isArray: (array: any) => array is Array<any>;
+        checkJanusExtension: () => boolean;
+        httpAPICall: (url: string, options: any) => void;
+    }
+
+    export enum DebugLevel {
+        Trace = 'trace',
+        Debug = 'debug',
+        Log = 'log',
+        Warning = 'warn',
+        Error = 'error'
+    }
+
+    export interface JSEP {
+    }
+
+    export interface InitOptions {
+        debug?: boolean | 'all' | DebugLevel[];
+        callback?: Function;
+        dependencies?: Dependencies;
+    }
+
+    export interface ConstuctorOptions {
+        server: string | string[];
+        iceServers?: string[];
+        ipv6?: boolean;
+        withCredentials?: boolean;
+        max_poll_events?: number;
+        destroyOnUnload?: boolean;
+        token?: string;
+        apisecret?: string;
+        success?: Function;
+        error?: (error: any) => void;
+        destroyed?: Function;
+    }
+
+    export enum MessageType {
+        Recording = 'recording',
+        Stopped = 'stopped',
+        SlowLink = 'slow_link',
+        Preparing = 'preparing',
+        Refreshing = 'refreshing'
+    }
+
+    export interface Message {
+        result?: {
+            status: MessageType;
+            id?: string;
+            uplink?: number;
+        };
+    }
+
+    export interface PluginOptions {
+        plugin: string;
+        opaqueId?: string;
+        success?: (handle: PluginHandle) => void;
+        error?: (error: any) => void;
+        consentDialog?: (on: boolean) => void;
+        webrtcState?: (isConnected: boolean) => void;
+        iceState?: (state: 'connected' | 'failed') => void;
+        mediaState?: (state: { type: 'audio' | 'video'; on: boolean }) => void;
+        slowLink?: (state: { uplink: boolean }) => void;
+        onmessage?: (message: Message, jsep?: JSEP) => void;
+        onlocalstream?: (stream: MediaStream) => void;
+        onremotestream?: (stream: MediaStream) => void;
+        ondataopen?: Function;
+        ondata?: Function;
+        oncleanup?: Function;
+        detached?: Function;
+    }
+
+    export interface OfferParams {
+        media?: {
+            audioSend?: boolean;
+            audioRecv?: boolean;
+            videoSend?: boolean;
+            videoRecv?: boolean;
+            audio?: boolean | { deviceId: string };
+            video?:
+                | boolean
+                | { deviceId: string }
+                | 'lowres'
+                | 'lowres-16:9'
+                | 'stdres'
+                | 'stdres-16:9'
+                | 'hires'
+                | 'hires-16:9';
+            data?: boolean;
+            failIfNoAudio?: boolean;
+            failIfNoVideo?: boolean;
+            screenshareFrameRate?: number;
+        };
+        trickle?: boolean;
+        stream?: MediaStream;
+        success: Function;
+        error: (error: any) => void;
+    }
+
+    export interface PluginMessage {
+        message: {
+            request: string;
+            [otherProps: string]: any;
+        };
+        jsep?: JSEP;
+    }
+
+    export interface PluginHandle {
+        getId(): string;
+
+        getPlugin(): string;
+
+        send(message: PluginMessage): void;
+
+        createOffer(params: any): void;
+
+        createAnswer(params: any): void;
+
+        handleRemoteJsep(params: { jsep: JSEP }): void;
+
+        dtmf(params: any): void;
+
+        data(params: any): void;
+
+        getBitrate(): number;
+
+        hangup(sendRequest?: boolean): void;
+
+        detach(params: any): void;
+    }
+
+    export class Janus {
+        static useDefaultDependencies(deps: Partial<Dependencies>): Dependencies;
+
+        static useOldDependencies(deps: Partial<Dependencies>): Dependencies;
+
+        static init(options: InitOptions): void;
+
+        static isWebrtcSupported(): boolean;
+
+        static debug(...args: any[]): void;
+
+        static log(...args: any[]): void;
+
+        static warn(...args: any[]): void;
+
+        static error(...args: any[]): void;
+
+        static randomString(length: number): string;
+
+        constructor(options: ConstuctorOptions);
+
+        getServer(): string;
+
+        isConnected(): boolean;
+
+        getSessionId(): string;
+
+        attach(options: PluginOptions): void;
+
+        destroy(): void;
+    }
 }
