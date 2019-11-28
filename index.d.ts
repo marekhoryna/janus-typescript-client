@@ -137,6 +137,7 @@ declare namespace JanusJS {
         static warn(...args: any[]): void;
         static error(...args: any[]): void;
         static randomString(length: number): string;
+        static attachMediaStream(element: Element, stream: MediaStream): void;
 
         constructor(options: ConstuctorOptions);
 
