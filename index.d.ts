@@ -39,6 +39,8 @@ declare namespace JanusJS {
 
     enum MessageType {
         Recording = 'recording',
+        Starting = 'starting',
+        Started = 'started',
         Stopped = 'stopped',
         SlowLink = 'slow_link',
         Preparing = 'preparing',
@@ -51,6 +53,7 @@ declare namespace JanusJS {
             id?: string;
             uplink?: number;
         };
+        error?: Error;
     }
 
     interface PluginOptions {
@@ -80,14 +83,14 @@ declare namespace JanusJS {
             videoRecv?: boolean;
             audio?: boolean | { deviceId: string };
             video?:
-                | boolean
-                | { deviceId: string }
-                | 'lowres'
-                | 'lowres-16:9'
-                | 'stdres'
-                | 'stdres-16:9'
-                | 'hires'
-                | 'hires-16:9';
+              | boolean
+              | { deviceId: string }
+              | 'lowres'
+              | 'lowres-16:9'
+              | 'stdres'
+              | 'stdres-16:9'
+              | 'hires'
+              | 'hires-16:9';
             data?: boolean;
             failIfNoAudio?: boolean;
             failIfNoVideo?: boolean;
@@ -116,6 +119,9 @@ declare namespace JanusJS {
         handleRemoteJsep(params: { jsep: JSEP }): void;
         dtmf(params: any): void;
         data(params: any): void;
+        isVideoMuted(): boolean;
+        muteVideo(): void;
+        unmuteVideo(): void;
         getBitrate(): number;
         hangup(sendRequest?: boolean): void;
         detach(params: any): void;
@@ -131,7 +137,6 @@ declare namespace JanusJS {
         static warn(...args: any[]): void;
         static error(...args: any[]): void;
         static randomString(length: number): string;
-        static attachMediaStream(element: Element, stream: MediaStream): void;
 
         constructor(options: ConstuctorOptions);
 
