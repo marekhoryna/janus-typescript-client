@@ -108,6 +108,7 @@ declare namespace JanusJS {
             [otherProps: string]: any;
         };
         jsep?: JSEP;
+        [otherProps: string]: any;
     }
 
     interface PluginHandle {
