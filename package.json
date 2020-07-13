@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "typings": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kow33/janus-typescript-client.git"
+    "url": "git+https://github.com/mika-go-13/janus-typescript-client.git"
   },
-  "author": "",
+  "author": "mika_go",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kow33/janus-typescript-client/issues"
+    "url": "https://github.com/mika-go-13/janus-typescript-client/issues"
   },
-  "homepage": "https://github.com/kow33/janus-typescript-client#readme"
+  "homepage": "https://github.com/mika-go-13/janus-typescript-client#readme"
 }
