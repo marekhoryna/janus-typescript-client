@@ -154,7 +154,7 @@ declare namespace JanusJS {
         getServer(): string;
         isConnected(): boolean;
         getSessionId(): string;
-        attach(options: StreamingPluginOptions): void;
+        attach(options: StreamingPlugin.StreamingPluginOptions): void;
         attach(options: PluginOptions): void;
     }
 
@@ -211,7 +211,7 @@ declare namespace JanusJS {
             message: { request: "info", id: number };
             success: (result?: StreamInfoResponse) => void;
         }
-        
+
         interface StreamInfo {
             /**
              * unique ID of mountpoint
