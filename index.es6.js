@@ -1,3 +1,3 @@
 const Janus = require('./lib/janus.nojquery');
 
-module.exports = Janus;
+export default Janus;
