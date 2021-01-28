@@ -208,9 +208,10 @@ declare namespace JanusJS {
         }
 
         interface StreamInfoRequestMessage extends PluginMessage {
-            message: { request: "info" };
+            message: { request: "info", id: number };
             success: (result?: StreamInfoResponse) => void;
         }
+        
         interface StreamInfo {
             /**
              * unique ID of mountpoint
