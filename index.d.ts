@@ -138,7 +138,15 @@ declare namespace JanusJS {
         static warn(...args: any[]): void;
         static error(...args: any[]): void;
         static randomString(length: number): string;
-        
+
+        /**
+         * an adapter object such as provided by [the webrtc-adapter library](https://github.com/webrtc/adapter)
+         */
+        static webRTCAdapter: {
+            browserDetails: {
+                browser: string
+            }
+        };
 
         constructor(options: ConstructorOptions);
 
