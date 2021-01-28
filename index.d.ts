@@ -165,14 +165,12 @@ declare namespace JanusJS {
         }
 
         interface StreamingPluginHandle extends PluginHandle {
-            send(message: PluginMessage & {
-                message: ListStreamRequest;
-                success: (result?: ListStreamResponse) => void;
-            }): void;
+            send(message: ListStreamRequestMessage): void;
         }
 
-        interface ListStreamRequest {
-            request: "list"
+        interface ListStreamRequestMessage extends PluginMessage {
+            message: { request: "list" };
+            success: (result?: ListStreamResponse) => void;
         }
         interface ListStreamResponse {
             streaming: "list";
