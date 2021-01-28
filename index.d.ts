@@ -146,6 +146,8 @@ declare namespace JanusJS {
         getSessionId(): string;
         attach(options: PluginOptions): void;
         destroy(): void;
+
+        randomString(length: number): string;
     }
 }
 
