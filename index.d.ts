@@ -159,6 +159,138 @@ declare namespace JanusJS {
     }
 
     namespace StreamingPlugin {
+
+        interface ListStreamRequestMessage extends PluginMessage {
+            message: { request: "list" };
+            success: (result?: ListStreamResponse) => void;
+        }
+
+        interface ListStreamResponseEntry {
+            /**
+             * unique ID of mountpoint
+             */
+            "id": number;
+
+            /**
+             * type of mountpoint, in line with the types introduced above
+             */
+            "type": 'rtp' | 'live' | 'ondemand' | 'rtsp';
+
+            /**
+             * description of mountpoint
+             */
+            "description": string;
+
+            /**
+             * metadata of mountpoint, if any
+             */
+            "metadata"?: string;
+
+            /**
+             * depending on whether the mountpoint is currently enabled or not
+             */
+            "enabled": boolean;
+
+            /**
+             * how much time passed since we last received audio; optional, available for RTP mountpoints only
+             */
+            "audio_age_ms": number;
+
+            /**
+             * how much time passed since we last received video; optional, available for RTP mountpoints only
+             */
+            "video_age_ms": number;
+        }
+
+        interface ListStreamResponse {
+            streaming: "list";
+            list: ListStreamResponseEntry[];
+        }
+
+        interface StreamInfoRequestMessage extends PluginMessage {
+            message: { request: "info" };
+            success: (result?: StreamInfoResponse) => void;
+        }
+        interface StreamInfo {
+            /**
+             * unique ID of mountpoint
+             */
+            "id": number;
+
+            /**
+             * unique name of mountpoint
+             */
+            "name": string;
+            /**
+            * description of mountpoint
+            */
+            "description": string;
+            /**
+             * metadata of mountpoint, if any
+             */
+            "metadata"?: string;
+
+            /**
+             * depending on whether the mountpoint is currently enabled or not
+             */
+            "enabled": boolean;
+
+            /**
+             * depending on whether the mountpoint is listable; only available if a valid secret was provided
+             */
+            "is_private": boolean;
+
+            /**
+             * count of current subscribers, if any
+             */
+            "viewers": number;
+
+            /**
+             * true, only present if the mountpoint contains audio
+             */
+            "audio"?: boolean;
+
+            /**
+             * audio payload type, only present if configured and the mountpoint contains audio
+             */
+            "audiopt"?: string;
+
+            /**
+             * audio SDP rtpmap value, only present if configured and the mountpoint contains audio
+             */
+            "audiortpmap"?: string;
+
+            /**
+             * audio SDP fmtp value, only present if configured and the mountpoint contains audio
+             */
+            "audiofmtp"?: string;
+
+            /**
+             * true, only present if the mountpoint contains video
+             */
+            "video"?: boolean;
+
+            /**
+             * video payload type, only present if configured and the mountpoint contains video
+             */
+            "videopt"?: string;
+
+            /**
+             * video SDP rtpmap value, only present if configured and the mountpoint contains video
+             */
+            "videortpmap"?: string;
+
+            /**
+             * video SDP fmtp value, only present if configured and the mountpoint contains video
+             */
+            "videofmtp"?: string;
+        }
+
+        interface StreamInfoResponse {
+            streaming: "info";
+            info: StreamInfo;
+        }
+
         interface StreamingPluginOptions extends PluginOptions {
             plugin: "janus.plugin.streaming",
             success: (streamingPlugin: StreamingPluginHandle) => void;
@@ -166,50 +298,7 @@ declare namespace JanusJS {
 
         interface StreamingPluginHandle extends PluginHandle {
             send(message: ListStreamRequestMessage): void;
-        }
-
-        interface ListStreamRequestMessage extends PluginMessage {
-            message: { request: "list" };
-            success: (result?: ListStreamResponse) => void;
-        }
-        interface ListStreamResponse {
-            streaming: "list";
-            list: {
-                /**
-                 * unique ID of mountpoint
-                 */
-                "id": number;
-
-                /**
-                 * type of mountpoint, in line with the types introduced above
-                 */
-                "type": 'rtp' | 'live' | 'ondemand' | 'rtsp';
-
-                /**
-                 * description of mountpoint
-                 */
-                "description": string;
-
-                /**
-                 * metadata of mountpoint, if any
-                 */
-                "metadata"?: string;
-
-                /**
-                 * depending on whether the mountpoint is currently enabled or not
-                 */
-                "enabled": boolean;
-
-                /**
-                 * how much time passed since we last received audio; optional, available for RTP mountpoints only
-                 */
-                "audio_age_ms": number;
-
-                /**
-                 * how much time passed since we last received video; optional, available for RTP mountpoints only
-                 */
-                "video_age_ms": number;
-            }[];
+            send(message: StreamInfoRequestMessage): void;
         }
     }
 }
