@@ -15,7 +15,7 @@ declare namespace JanusJS {
         Error = 'error'
     }
 
-    interface JSEP {}
+    interface JSEP { }
 
     interface InitOptions {
         debug?: boolean | 'all' | DebugLevel[];
@@ -83,14 +83,14 @@ declare namespace JanusJS {
             videoRecv?: boolean;
             audio?: boolean | { deviceId: string };
             video?:
-              | boolean
-              | { deviceId: string }
-              | 'lowres'
-              | 'lowres-16:9'
-              | 'stdres'
-              | 'stdres-16:9'
-              | 'hires'
-              | 'hires-16:9';
+            | boolean
+            | { deviceId: string }
+            | 'lowres'
+            | 'lowres-16:9'
+            | 'stdres'
+            | 'stdres-16:9'
+            | 'hires'
+            | 'hires-16:9';
             data?: boolean;
             failIfNoAudio?: boolean;
             failIfNoVideo?: boolean;
@@ -154,10 +154,65 @@ declare namespace JanusJS {
         getServer(): string;
         isConnected(): boolean;
         getSessionId(): string;
+        attach(options: StreamingPluginOptions): void;
         attach(options: PluginOptions): void;
-        destroy(): void;
+    }
 
-        randomString(length: number): string;
+    namespace StreamingPlugin {
+        interface StreamingPluginOptions extends PluginOptions {
+            plugin: "janus.plugin.streaming",
+            success: (streamingPlugin: StreamingPluginHandle) => void;
+        }
+
+        interface StreamingPluginHandle extends PluginHandle {
+            send(message: PluginMessage & {
+                message: ListStreamRequest;
+                success: (result?: ListStreamResponse) => void;
+            }): void;
+        }
+
+        interface ListStreamRequest {
+            request: "list"
+        }
+        interface ListStreamResponse {
+            streaming: "list";
+            list: {
+                /**
+                 * unique ID of mountpoint
+                 */
+                "id": number;
+
+                /**
+                 * type of mountpoint, in line with the types introduced above
+                 */
+                "type": 'rtp' | 'live' | 'ondemand' | 'rtsp';
+
+                /**
+                 * description of mountpoint
+                 */
+                "description": string;
+
+                /**
+                 * metadata of mountpoint, if any
+                 */
+                "metadata"?: string;
+
+                /**
+                 * depending on whether the mountpoint is currently enabled or not
+                 */
+                "enabled": boolean;
+
+                /**
+                 * how much time passed since we last received audio; optional, available for RTP mountpoints only
+                 */
+                "audio_age_ms": number;
+
+                /**
+                 * how much time passed since we last received video; optional, available for RTP mountpoints only
+                 */
+                "video_age_ms": number;
+            }[];
+        }
     }
 }
 
