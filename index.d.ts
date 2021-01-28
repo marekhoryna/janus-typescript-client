@@ -292,14 +292,27 @@ declare namespace JanusJS {
             info: StreamInfo;
         }
 
-        interface StreamingPluginOptions extends PluginOptions {
-            plugin: "janus.plugin.streaming",
-            success: (streamingPlugin: StreamingPluginHandle) => void;
+        interface PlayStreamRequestMessage extends PluginMessage {
+            message: { request: "watch", id: number };
+            success: (result?: any) => void;
+        }
+
+        interface StopStreamRequestMessage extends PluginMessage {
+            message: { request: "stop" };
+            success: (result?: any) => void;
         }
 
         interface StreamingPluginHandle extends PluginHandle {
             send(message: ListStreamRequestMessage): void;
             send(message: StreamInfoRequestMessage): void;
+            send(message: PlayStreamRequestMessage): void;
+            send(message: StopStreamRequestMessage): void;
+            send(message: PluginMessage): void;
+        }
+
+        interface StreamingPluginOptions extends PluginOptions {
+            plugin: "janus.plugin.streaming",
+            success: (streamingPlugin: StreamingPluginHandle) => void;
         }
     }
 }
