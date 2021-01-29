@@ -15,7 +15,10 @@ declare namespace JanusJS {
         Error = 'error'
     }
 
-    interface JSEP { }
+    interface JSEP {
+        type: string;
+        sdp: string;
+     }
 
     interface InitOptions {
         debug?: boolean | 'all' | DebugLevel[];
@@ -292,7 +295,12 @@ declare namespace JanusJS {
             info: StreamInfo;
         }
 
-        interface PlayStreamRequestMessage extends PluginMessage {
+        interface StartStreamRequestMessage extends PluginMessage {
+            message: { request: "start", jsep: JSEP };
+            success: (result?: any) => void;
+        }
+
+        interface SubscribeToStreamRequestMessage extends PluginMessage {
             message: { request: "watch", id: number };
             success: (result?: any) => void;
         }
@@ -302,11 +310,37 @@ declare namespace JanusJS {
             success: (result?: any) => void;
         }
 
+        /**
+         * Plugin handle, as defined here:
+         * https://janus.conf.meetecho.com/docs/streaming.html
+         */
         interface StreamingPluginHandle extends PluginHandle {
+            
+            /**
+             * Fetch available public streams summary
+             */
             send(message: ListStreamRequestMessage): void;
+            
+            /**
+             * Get details about a stream by ID
+             */
             send(message: StreamInfoRequestMessage): void;
-            send(message: PlayStreamRequestMessage): void;
+
+            /**
+             * Subscribe to a stream by ID - this will generate JSEP SDP offer
+             */
+            send(message: SubscribeToStreamRequestMessage): void;
+
+            /**
+             * Start playing a stream by ID according to given SDP
+             */
+            send(message: StartStreamRequestMessage): void;
+
+            /**
+             * Stop playing
+             */
             send(message: StopStreamRequestMessage): void;
+            
             send(message: PluginMessage): void;
         }
 
