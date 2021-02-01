@@ -154,11 +154,35 @@ declare namespace JanusJS {
 
         constructor(options: ConstructorOptions);
 
+        /**
+         * returns the address of the server
+         */
         getServer(): string;
+
+        /**
+         * returns true if the Janus instance is connected to the server, false otherwise;
+         */
         isConnected(): boolean;
+
+        /**
+         * returns the unique Janus session identifier;
+         */
         getSessionId(): string;
+
+        /**
+         * attaches the session to the Streaming plugin
+         */
         attach(options: StreamingPlugin.StreamingPluginOptions): void;
+
+        /**
+         * attaches the session to a plugin, creating a handle; more handles to the same or different plugins can be created at the same time;
+         */
         attach(options: PluginOptions): void;
+
+        /**
+         * destroys the session with the server, and closes all the handles (and related PeerConnections) the session may have with any plugin as well.
+         */
+        destroy(): void;
     }
 
     namespace StreamingPlugin {
