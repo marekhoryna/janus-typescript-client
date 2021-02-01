@@ -329,7 +329,7 @@ declare namespace JanusJS {
                 /**
                  * unique ID to assign the mountpoint; optional, will be chosen by the server if missing
                  */
-                "id"?: string;
+                "id"?: number;
 
                 /**
                  * unique name for the mountpoint; optional, will be chosen by the server if missing
@@ -430,7 +430,7 @@ declare namespace JanusJS {
                 /**
                  * unique ID of the just created mountpoint
                  */
-                "id": string;
+                "id": number;
 
                 /**
                  * type of the just created mountpoint
