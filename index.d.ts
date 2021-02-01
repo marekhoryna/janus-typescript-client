@@ -18,7 +18,7 @@ declare namespace JanusJS {
     interface JSEP {
         type: string;
         sdp: string;
-     }
+    }
 
     interface InitOptions {
         debug?: boolean | 'all' | DebugLevel[];
@@ -168,6 +168,8 @@ declare namespace JanusJS {
             success: (result?: ListStreamResponse) => void;
         }
 
+        type StreamType = 'rtp' | 'live' | 'ondemand' | 'rtsp';
+
         interface ListStreamResponseEntry {
             /**
              * unique ID of mountpoint
@@ -177,7 +179,7 @@ declare namespace JanusJS {
             /**
              * type of mountpoint, in line with the types introduced above
              */
-            "type": 'rtp' | 'live' | 'ondemand' | 'rtsp';
+            "type": StreamType;
 
             /**
              * description of mountpoint
@@ -310,17 +312,159 @@ declare namespace JanusJS {
             success: (result?: any) => void;
         }
 
+        interface CreateStreamRequestMessage extends PluginMessage {
+            message: {
+                "request": "create",
+
+                /**
+                 * plugin administrator key; mandatory if configured
+                 */
+                "admin_key"?: string;
+
+                /**
+                 * type of mountpoint
+                 */
+                "type": StreamType;
+
+                /**
+                 * unique ID to assign the mountpoint; optional, will be chosen by the server if missing
+                 */
+                "id"?: string;
+
+                /**
+                 * unique name for the mountpoint; optional, will be chosen by the server if missing
+                 */
+                "name"?: string;
+
+                /**
+                 * description of mountpoint; optional
+                 */
+                "description"?: string;
+
+                /**
+                 * metadata of mountpoint; optional
+                 */
+                "metadata"?: string;
+
+                /**
+                 * secret to query/edit the mountpoint later; optional
+                 */
+                "secret"?: string;
+
+                /**
+                 * PIN required for viewers to access mountpoint; optional
+                 */
+                "pin"?: string;
+
+                /**
+                 * whether the mountpoint should be listable; true by default
+                 */
+                "is_private"?: boolean;
+
+                /**
+                 * whether the mountpoint will have audio; false by default
+                 */
+                "audio"?: boolean;
+
+                /**
+                 * whether the mountpoint will have video; false by default
+                 */
+                "video"?: boolean;
+
+                /**
+                 * whether the mountpoint will have datachannels; false by default
+                 */
+                "data"?: boolean;
+
+                /**
+                 * whether the mountpoint should be saved to configuration file or not; false by default
+                 */
+                "permanent"?: boolean;
+
+                /**
+                 * audio payload type, only present if configured and the mountpoint contains audio
+                 */
+                "audiopt"?: string;
+
+                /**
+                 * audio SDP rtpmap value, only present if configured and the mountpoint contains audio
+                 */
+                "audiortpmap"?: string;
+
+                /**
+                 * audio SDP fmtp value, only present if configured and the mountpoint contains audio
+                 */
+                "audiofmtp"?: string;
+
+                /**
+                 * video payload type, only present if configured and the mountpoint contains video
+                 */
+                "videopt"?: string;
+
+                /**
+                 * video SDP rtpmap value, only present if configured and the mountpoint contains video
+                 */
+                "videortpmap"?: string;
+
+                /**
+                 * video SDP fmtp value, only present if configured and the mountpoint contains video
+                 */
+                "videofmtp"?: string;
+            };
+            success: (result?: CreateStreamResponse) => void;
+        }
+
+        interface CreateStreamResponse {
+            "streaming": "created";
+
+            /**
+             * unique name of the just created mountpoint
+             */
+            "create": string;
+
+            /**
+             * depending on whether the mountpoint was saved to configuration file or not
+             */
+            "permanent": boolean,
+            "stream": {
+                /**
+                 * unique ID of the just created mountpoint
+                 */
+                "id": string;
+
+                /**
+                 * type of the just created mountpoint
+                 */
+                "type": StreamType;
+
+                /**
+                 * description of the just created mountpoint
+                 */
+                "description": string;
+
+                /**
+                 * depending on whether the new mountpoint is listable
+                 */
+                "is_private": boolean;
+            } & Partial<StreamInfo>;
+        }
+
         /**
          * Plugin handle, as defined here:
          * https://janus.conf.meetecho.com/docs/streaming.html
          */
         interface StreamingPluginHandle extends PluginHandle {
-            
+
+            /**
+             * Creates a new stream on server
+             */
+            send(message: CreateStreamRequestMessage): void;
+
             /**
              * Fetch available public streams summary
              */
             send(message: ListStreamRequestMessage): void;
-            
+
             /**
              * Get details about a stream by ID
              */
@@ -340,7 +484,7 @@ declare namespace JanusJS {
              * Stop playing
              */
             send(message: StopStreamRequestMessage): void;
-            
+
             send(message: PluginMessage): void;
         }
 
