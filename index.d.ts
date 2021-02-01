@@ -397,6 +397,11 @@ declare namespace JanusJS {
                 "audiofmtp"?: string;
 
                 /**
+                 * RTSP stream URL (only for restreaming RTSP)
+                 */
+                "url"?: string;
+
+                /**
                  * video payload type, only present if configured and the mountpoint contains video
                  */
                 "videopt"?: string;
