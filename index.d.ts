@@ -62,6 +62,7 @@ declare namespace JanusJS {
     interface PluginOptions {
         plugin: string;
         opaqueId?: string;
+        token?: string;
         success?: (handle: PluginHandle) => void;
         error?: (error: any) => void;
         consentDialog?: (on: boolean) => void;
