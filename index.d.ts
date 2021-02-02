@@ -128,7 +128,7 @@ declare namespace JanusJS {
         unmuteVideo(): void;
         getBitrate(): number;
         hangup(sendRequest?: boolean): void;
-        detach(callbacks?: { success: () => void, error: (error: any) => void }): void;
+        detach(callbacks?: { success?: () => void, error?: (error: any) => void }): void;
     }
 
     class Janus {
@@ -187,7 +187,7 @@ declare namespace JanusJS {
         /**
          * destroys the session with the server, and closes all the handles (and related PeerConnections) the session may have with any plugin as well.
          */
-        destroy(callbacks?: { success: () => void, error: (error: any) => void }): void;
+        destroy(callbacks?: { success?: () => void, error?: (error: any) => void }): void;
     }
 
     namespace StreamingPlugin {
