@@ -144,6 +144,11 @@ declare namespace JanusJS {
         static attachMediaStream(videoElement: HTMLVideoElement, stream: MediaStream): void;
 
         /**
+         * Janus sessions - this map is not cleaned on session destroy, which can cause memory leak :( (2021-02-01)
+         */
+        static sessions: { [id: string]: any };
+
+        /**
          * an adapter object such as provided by [the webrtc-adapter library](https://github.com/webrtc/adapter)
          */
         static webRTCAdapter: {
