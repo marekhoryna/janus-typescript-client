@@ -484,6 +484,38 @@ declare namespace JanusJS {
             } & Partial<StreamInfo>;
         }
 
+        interface DestroyStreamRequestMessage extends PluginMessage {
+            message: {
+                "request": "destroy",
+
+                /**
+                 * unique ID of the mountpoint to destroy; mandatory
+                 */
+                "id": number;
+
+                /**
+                 * secret to destroy the mountpoint; mandatory if configured
+                 */
+                "secret"?: string;
+
+                /**
+                 * true|false, whether the mountpoint should be removed from the configuration file or not; false by default
+                 */
+                "permanent"?: boolean;
+
+
+            };
+            success: (result?: DestroyStreamResponse) => void;
+        }
+
+        interface DestroyStreamResponse {
+            "streaming": "destroyed";
+            /**
+             * unique ID of the just destroyed mountpoint
+             */
+            "id": number;
+        }
+
         /**
          * Plugin handle, as defined here:
          * https://janus.conf.meetecho.com/docs/streaming.html
@@ -494,6 +526,11 @@ declare namespace JanusJS {
              * Creates a new stream on server
              */
             send(message: CreateStreamRequestMessage): void;
+            
+            /**
+             * Deletes a stream from the server
+             */
+            send(message: DestroyStreamRequestMessage): void;
 
             /**
              * Fetch available public streams summary
