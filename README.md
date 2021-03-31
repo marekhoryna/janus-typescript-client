@@ -4,12 +4,15 @@ Wrapper with library and typescript definitions for Janus Gateway Client.
 
 ## Installation
 
-`yarn add https://github.com/marekhoryna/janus-typescript-client`
+`npm intall janus-typescript-client`
+\
+\
+`yarn add janus-typescript-client`
 
 ## Usage
 
 ```
-import * as Janus from 'janus-typescript-client;
+import * as Janus from 'janus-typescript-client';
 
 Janus.init({
     callback: () => {
