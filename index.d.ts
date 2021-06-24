@@ -565,6 +565,89 @@ declare namespace JanusJS {
             success: (streamingPlugin: StreamingPluginHandle) => void;
         }
     }
+
+    namespace VideoCallPlugin{
+        interface ListUsersRequestMessage extends PluginMessage {
+            message: { request: "list" };
+            success: (result?: ListUsersResponse) => void;
+        }
+
+        interface ListUsersResponseEntry {
+            /**
+             * unique username used to start a call
+             */
+            "Username": string;
+        }
+
+        interface ListUsersResponse {
+            videocall: "event";
+            result:{
+                list: ListUsersResponseEntry[];
+            } 
+        }
+
+        interface RegisterUserRequestMessage extends PluginMessage {
+            message: {request: "register", username: string};
+            success: (result?: RegisterUserResponse) => void;
+        }
+
+        interface RegisterUserResponse {
+            videocall: "event";
+            result:{
+                event: "registered",
+                username: string
+            } 
+        }
+
+        interface CallUserMessage extends PluginMessage {
+            message: {request: "call", username: string}
+            sucess: (result?: CallUserResponse) => void;
+        }
+
+        interface CallUserResponse {
+            videocall: "event";
+            result:{
+                event: "calling",
+                username: string
+            } 
+        }
+
+        interface IncomingCallEvent {
+            videocall: "event";
+            result:{
+                event: "incomingcall",
+                username: string
+            } 
+        }
+
+        interface AcceptCallMessage extends PluginMessage {
+            message: {request: "accept"}
+            success: (result?: AcceptCallResponse) => void;
+        }
+
+        interface AcceptCallResponse {
+            videocall : "event",
+            result : {
+                event : "accepted",
+                username : string
+            }
+        }
+
+        interface HangupCallMessage extends PluginMessage {
+            message: {request: "hangup"}
+            success: (result?: HangupCallResponse) => void;
+        }
+
+        interface HangupCallResponse {
+            videocall : "event",
+            result : {
+                event : "hangup",
+                username : string,
+                reason: string
+            }
+        }
+
+    }
 }
 
 export default JanusJS.Janus;
