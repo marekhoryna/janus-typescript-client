@@ -647,6 +647,45 @@ declare namespace JanusJS {
             }
         }
 
+        /**
+         * Plugin handle, as defined here:
+         * https://janus.conf.meetecho.com/docs/streaming.html
+         */
+         interface VideoCallPluginHandle extends PluginHandle {
+
+            /**
+             * List the user you can call
+             */
+            send(message: ListUsersRequestMessage): void;
+            
+            /**
+             * Register a new user to call
+             */
+            send(message: RegisterUserRequestMessage): void;
+
+            /**
+             * Call a user
+             */
+            send(message: CallUserMessage): void;
+
+            /**
+             * Accept an incoming call
+             */
+            send(message: AcceptCallMessage): void;
+
+            /**
+             * Hangup a call
+             */
+            send(message: HangupCallMessage): void;
+
+            send(message: PluginMessage): void;
+        }
+
+        interface VideoCallPluginOptions extends PluginOptions {
+            plugin: "janus.plugin.videocall",
+            success: (streamingPlugin: VideoCallPluginHandle) => void;
+        }
+
     }
 }
 
