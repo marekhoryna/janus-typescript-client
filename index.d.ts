@@ -53,6 +53,7 @@ declare namespace JanusJS {
     interface Message {
         result?: {
             status: MessageType;
+            event?: string;
             id?: string;
             uplink?: number;
         };
@@ -649,7 +650,7 @@ declare namespace JanusJS {
 
         /**
          * Plugin handle, as defined here:
-         * https://janus.conf.meetecho.com/docs/streaming.html
+         * https://janus.conf.meetecho.com/docs/videocall.html
          */
          interface VideoCallPluginHandle extends PluginHandle {
 
