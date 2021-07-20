@@ -53,6 +53,7 @@ declare namespace JanusJS {
     interface Message {
         result?: {
             status: MessageType;
+            event?: string;
             id?: string;
             uplink?: number;
         };
@@ -564,6 +565,128 @@ declare namespace JanusJS {
             plugin: "janus.plugin.streaming",
             success: (streamingPlugin: StreamingPluginHandle) => void;
         }
+    }
+
+    namespace VideoCallPlugin{
+        interface ListUsersRequestMessage extends PluginMessage {
+            message: { request: "list" };
+            success: (result?: ListUsersResponse) => void;
+        }
+
+        interface ListUsersResponseEntry {
+            /**
+             * unique username used to start a call
+             */
+            "Username": string;
+        }
+
+        interface ListUsersResponse {
+            videocall: "event";
+            result:{
+                list: ListUsersResponseEntry[];
+            } 
+        }
+
+        interface RegisterUserRequestMessage extends PluginMessage {
+            message: {request: "register", username: string};
+            success: (result?: RegisterUserResponse) => void;
+        }
+
+        interface RegisterUserResponse {
+            videocall: "event";
+            result:{
+                event: "registered",
+                username: string
+            } 
+        }
+
+        interface CallUserMessage extends PluginMessage {
+            message: {request: "call", username: string}
+            sucess: (result?: CallUserResponse) => void;
+        }
+
+        interface CallUserResponse {
+            videocall: "event";
+            result:{
+                event: "calling",
+                username: string
+            } 
+        }
+
+        interface IncomingCallEvent {
+            videocall: "event";
+            result:{
+                event: "incomingcall",
+                username: string
+            } 
+        }
+
+        interface AcceptCallMessage extends PluginMessage {
+            message: {request: "accept"}
+            success: (result?: AcceptCallResponse) => void;
+        }
+
+        interface AcceptCallResponse {
+            videocall : "event",
+            result : {
+                event : "accepted",
+                username : string
+            }
+        }
+
+        interface HangupCallMessage extends PluginMessage {
+            message: {request: "hangup"}
+            success: (result?: HangupCallResponse) => void;
+        }
+
+        interface HangupCallResponse {
+            videocall : "event",
+            result : {
+                event : "hangup",
+                username : string,
+                reason: string
+            }
+        }
+
+        /**
+         * Plugin handle, as defined here:
+         * https://janus.conf.meetecho.com/docs/videocall.html
+         */
+         interface VideoCallPluginHandle extends PluginHandle {
+
+            /**
+             * List the user you can call
+             */
+            send(message: ListUsersRequestMessage): void;
+            
+            /**
+             * Register a new user to call
+             */
+            send(message: RegisterUserRequestMessage): void;
+
+            /**
+             * Call a user
+             */
+            send(message: CallUserMessage): void;
+
+            /**
+             * Accept an incoming call
+             */
+            send(message: AcceptCallMessage): void;
+
+            /**
+             * Hangup a call
+             */
+            send(message: HangupCallMessage): void;
+
+            send(message: PluginMessage): void;
+        }
+
+        interface VideoCallPluginOptions extends PluginOptions {
+            plugin: "janus.plugin.videocall",
+            success: (streamingPlugin: VideoCallPluginHandle) => void;
+        }
+
     }
 }
 
